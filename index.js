@@ -68,10 +68,11 @@ bot.onText(/\/test/, (msg) => {
   }));
 })
 
-bot.onText(/\/get_updates/, async (msg) => {
+bot.onText(/\/get_udates/, async (msg) => {
   const chatId = msg.chat.id;
-  const updates = await axios.get(`${TELEGRAM_API}/getUpdates`)
-  bot.sendMessage(chatId, obj(updates));
+  const updates = await axios.get(`${TELEGRAM_API}/getUpdates`).catch(err => console.log(err.message))
+  console.log(updates)
+  bot.sendMessage(chatId, 'success');
 })
 
 bot.onText(/\/del_message (.+) /, (msg, match) => {
