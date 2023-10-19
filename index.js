@@ -66,43 +66,44 @@ bot.onText(/\/test/, (msg) => {
     tel_api: `${TELEGRAM_API}/setWebhook?url=${WEBHOOK_URL}`,
     WEBHOOK_URL, TELEGRAM_API,
   }));
+})
 
-  bot.onText(/\/get_updates/, (msg) => {
-    const chatId = msg.chat.id;
-    const updates = axios.get(`${TELEGRAM_API}/getUpdates`)
-    bot.sendMessage(chatId, obj(updates));
-  })
+bot.onText(/\/get_updates/, (msg) => {
+  const chatId = msg.chat.id;
+  const updates = axios.get(`${TELEGRAM_API}/getUpdates`)
+  bot.sendMessage(chatId, obj(updates));
+})
 
-  bot.onText(/\/del_message (.+) /, (msg, match) => {
-    const chatId = msg.chat.id;
-    bot.deleteMessage(chatId, match[1])
-      .then(res => {
-        bot.sendMessage(chatId, obj(res));
-      })
-      .catch((error) => {
-        console.error(`Error deleting message: ${error.message}`);
-      });
-  });
+bot.onText(/\/del_message (.+) /, (msg, match) => {
+  const chatId = msg.chat.id;
+  bot.deleteMessage(chatId, match[1])
+    .then(res => {
+      bot.sendMessage(chatId, obj(res));
+    })
+    .catch((error) => {
+      console.error(`Error deleting message: ${error.message}`);
+    });
+});
 
-  bot.on('text', async (msg) => {
-    const chatId = msg.chat.id;
-    const messageText = msg.text;
-    if (!userData[chatId]) userData[chatId] = {}
-    await bot.sendMessage(chatId, `You said: ${messageText}`);
-  });
+bot.on('text', async (msg) => {
+  const chatId = msg.chat.id;
+  const messageText = msg.text;
+  if (!userData[chatId]) userData[chatId] = {}
+  await bot.sendMessage(chatId, `You said: ${messageText}`);
+});
 
-  const app = express();
-  app.use(bodyParser.json());
+const app = express();
+app.use(bodyParser.json());
 
-  app.post(URI, (req, res) => {
-    // console.log(req.body);
-    const chat_id = req.body.message.chat.id;
-    const text = req.body.message.text;
-    bot.sendMessage(chat_id, text);
-    return res.send();
-  });
+app.post(URI, (req, res) => {
+  // console.log(req.body);
+  const chat_id = req.body.message.chat.id;
+  const text = req.body.message.text;
+  bot.sendMessage(chat_id, text);
+  return res.send();
+});
 
-  app.listen(process.env.PORT || 8080, async () => {
-    console.log('app running on port', process.env.PORT || 8080);
-    await init();
-  });
+app.listen(process.env.PORT || 8080, async () => {
+  console.log('app running on port', process.env.PORT || 8080);
+  await init();
+});
