@@ -22,6 +22,7 @@ function getData(id) {
 }
 
 const init = async () => {
+  console.log('Initializing Telegram API Webhook...')
   const res = await axios.get(`${TELEGRAM_API}/setWebhook?url=${WEBHOOK_URL}`);
   console.log(res.data);
 };
@@ -38,11 +39,18 @@ bot.onText(/\/help/, (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, 'Available commands:\n/start - Start the bot\n/help - Display this help message');
 });
-
-bot.onText(/^(\/add)/, (msg) => {
+bot.onText(/\b(?:what.*age|how.*old)\b/, (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, 'I am 26 years old');
+});
+bot.onText(/\b(?:where.*live)\b/, (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, 'I live in Lipa City, Batangas');
+});
+bot.onText(/^(?:\/add)/, (msg) => {
   const chatId = msg.chat.id;
   const keyVals = msg.text.replace('/add ', '').split(' ')
-  console.log(keyVals)
+
   keyVals.forEach(item => {
     const [a, b] = item.split('=')
     userData[chatId][a] = b
