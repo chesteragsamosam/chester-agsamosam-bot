@@ -13,11 +13,11 @@ const bot = new TelegramBot(TOKEN, { polling: true });
 
 const userData = {}
 
-function obj (ob) {
+function obj(ob) {
   return JSON.stringify(ob, null, 3)
 }
 
-function getData (id) {
+function getData(id) {
   return userData[id]
 }
 
@@ -38,6 +38,7 @@ bot.onText(/\/help/, (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, 'Available commands:\n/start - Start the bot\n/help - Display this help message');
 });
+
 bot.onText(/^(\/add)/, (msg) => {
   const chatId = msg.chat.id;
   const keyVals = msg.text.replace('/add ', '').split(' ')
@@ -52,6 +53,18 @@ bot.onText(/^(\/add)/, (msg) => {
 bot.onText(/\/get_data/, (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, obj(getData(chatId)));
+});
+
+bot.onText(/\/version/, (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, 'version 1.0.0');
+});
+bot.onText(/\/test/, (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, obj({
+    tel_api: `${TELEGRAM_API}/setWebhook?url=${WEBHOOK_URL}`,
+    WEBHOOK_URL, TELEGRAM_API,
+  }));
 });
 
 bot.on('text', async (msg) => {
