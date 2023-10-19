@@ -68,9 +68,9 @@ bot.onText(/\/test/, (msg) => {
   }));
 })
 
-bot.onText(/\/get_updates/, (msg) => {
+bot.onText(/\/get_updates/, async (msg) => {
   const chatId = msg.chat.id;
-  const updates = axios.get(`${TELEGRAM_API}/getUpdates`)
+  const updates = await axios.get(`${TELEGRAM_API}/getUpdates`)
   bot.sendMessage(chatId, obj(updates));
 })
 
